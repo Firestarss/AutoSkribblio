@@ -14,12 +14,12 @@ print(words['17'])
 print(words['18'])
 print(words['19'])
 
-"""
-main
-    give it the link
-    open the link in beautiful soup
+def main(args=sys.argv):
+    link = args[1]
+    info = BeautifulSoup(requests.get(link).text, 'html.parser')
 
-    Find player id
+    """
+     Find player id
         1. body ->
         2. div class="container-fluid" ->
         3. div id="screenGame" ->
@@ -30,6 +30,12 @@ main
         8. div class="info" ->
         9. div class="name"
             if last 5 chars of name == (You) save the id as your personal player id if not then go back to step7 and move to next sibling (div on same level)
+    """
+    playerid = info.body.find(class="container-fluid").find(id="ScreenGame").find(class="containerGame").find(id="containerPlayerlist").find(id="containerGamePlayers").id
+
+
+    """
+
 
     find what the word is to guess:
         if the word is full of ____ then got to step 1
@@ -42,7 +48,21 @@ main
                 if the class for div id=playerid is "player guessedWord":
                     break
             timer = body -> div class"container-fluid" -> div id="screenGame" -> div class="gameHeader" -> div class="timer-container" -> div class="timer"
+    """
 
+    time = info.body.find(class="container-fluid").find(id="ScreenGame").find(class="gameHeader").find(class="timer-container").find(id="timer")
+    playerClass = info.body.find(class="container-fluid").find(id="ScreenGame").find(class="containerGame").find(id="containerPlayerlist").find(id="containerGamePlayers").find(id=playerid).class
+    if time > 0:
+        guess()
+        info = BeautifulSoup(requests.get(link).text, 'html.parser')
+        playerClass = info.body.find(class="container-fluid").find(id="ScreenGame").find(class="containerGame").find(id="containerPlayerlist").find(id="containerGamePlayers").find(id=playerid).class
+        if playerClass == "player guessedWord":
+            break
+        time = info.body.find(class="container-fluid").find(id="ScreenGame").find(class="gameHeader").find(class="timer-container").find(id="timer")
+
+    """
     2. IF the player has to draw
         use google chrome extension to draw
-"""
+    """
+if __name__ == "__main__":
+    main()
