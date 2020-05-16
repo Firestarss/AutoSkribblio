@@ -34,9 +34,9 @@ def main(args=sys.argv):
     playerid = info.body.find(class="container-fluid").find(id="ScreenGame").find(class="containerGame").find(id="containerPlayerlist").find(id="containerGamePlayers").id
 
 
+    word = info.body.find(class="container-fluid").find(id="ScreenGame").find(class="gameHeader").find(id="currentWord")
+    #create list of word
     """
-
-
     find what the word is to guess:
         if the word is full of ____ then got to step 1
         if teh word has letters go to step 2
@@ -53,7 +53,11 @@ def main(args=sys.argv):
     time = info.body.find(class="container-fluid").find(id="ScreenGame").find(class="gameHeader").find(class="timer-container").find(id="timer")
     playerClass = info.body.find(class="container-fluid").find(id="ScreenGame").find(class="containerGame").find(id="containerPlayerlist").find(id="containerGamePlayers").find(id=playerid).class
     if time > 0:
-        guess()
+        newword = info.body.find(class="container-fluid").find(id="ScreenGame").find(class="gameHeader").find(id="currentWord")
+        if word != newword:
+            word = newword
+            #create new list of words
+        guessSingleWord()
         info = BeautifulSoup(requests.get(link).text, 'html.parser')
         playerClass = info.body.find(class="container-fluid").find(id="ScreenGame").find(class="containerGame").find(id="containerPlayerlist").find(id="containerGamePlayers").find(id=playerid).class
         if playerClass == "player guessedWord":
@@ -64,5 +68,6 @@ def main(args=sys.argv):
     2. IF the player has to draw
         use google chrome extension to draw
     """
+
 if __name__ == "__main__":
     main()
