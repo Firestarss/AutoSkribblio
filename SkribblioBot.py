@@ -5,15 +5,6 @@ import os.path
 import string
 from bs4 import BeautifulSoup
 
-with open("updated_list.json") as json_file:
-    words = json.load(json_file)
-
-print(words['10'])
-print(words['16'])
-print(words['17'])
-print(words['18'])
-print(words['19'])
-
 def main(args=sys.argv):
     link = args[1]
     info = BeautifulSoup(requests.get(link).text, 'html.parser')
@@ -31,10 +22,11 @@ def main(args=sys.argv):
         9. div class="name"
             if last 5 chars of name == (You) save the id as your personal player id if not then go back to step7 and move to next sibling (div on same level)
     """
-    playerid = info.body.find(class="container-fluid").find(id="ScreenGame").find(class="containerGame").find(id="containerPlayerlist").find(id="containerGamePlayers").id
-
-
-    word = info.body.find(class="container-fluid").find(id="ScreenGame").find(class="gameHeader").find(id="currentWord")
+    # playerid = info.body.div.next_sibling.next_sibling.find(id="screenGame").div.next_sibling.find(id="containerPlayerlist").find(id="containerGamePlayers").div.id
+    # print(playerid)
+    #
+    # word = info.body.div.next_sibling.next_sibling.find(id="ScreenGame").div.find(id="currentWord")
+    #print(word)
     #create list of word
     """
     find what the word is to guess:
@@ -50,19 +42,22 @@ def main(args=sys.argv):
             timer = body -> div class"container-fluid" -> div id="screenGame" -> div class="gameHeader" -> div class="timer-container" -> div class="timer"
     """
 
-    time = info.body.find(class="container-fluid").find(id="ScreenGame").find(class="gameHeader").find(class="timer-container").find(id="timer")
-    playerClass = info.body.find(class="container-fluid").find(id="ScreenGame").find(class="containerGame").find(id="containerPlayerlist").find(id="containerGamePlayers").find(id=playerid).class
-    if time > 0:
-        newword = info.body.find(class="container-fluid").find(id="ScreenGame").find(class="gameHeader").find(id="currentWord")
-        if word != newword:
-            word = newword
-            #create new list of words
-        guessSingleWord()
-        info = BeautifulSoup(requests.get(link).text, 'html.parser')
-        playerClass = info.body.find(class="container-fluid").find(id="ScreenGame").find(class="containerGame").find(id="containerPlayerlist").find(id="containerGamePlayers").find(id=playerid).class
-        if playerClass == "player guessedWord":
-            break
-        time = info.body.find(class="container-fluid").find(id="ScreenGame").find(class="gameHeader").find(class="timer-container").find(id="timer")
+    time = info.body.div.next_sibling.next_sibling.find(id="screenGame").div.div.find(id="timer")
+
+    print(time)
+    # playerClass = info.body.div.next_sibling.next_sibling.find(id="ScreenGame").div.next_sibling.find(id="containerPlayerlist").find(id="containerGamePlayers").find(id=playerid)['class']
+    # print(playerClass)
+    # while time < 0:
+    #     newword = info.body.div.next_sibling.next_sibling.find(id="ScreenGame").div.find(id="currentWord")
+    #     if word != newword:
+    #         word = newword
+    #         #create new list of words
+    #     guessSingleWord()
+    #     info = BeautifulSoup(requests.get(link).text, 'html.parser')
+    #     playerClass = info.body.div.next_sibling.next_sibling.find(id="ScreenGame").div.next_sibling.find(id="containerPlayerlist").find(id="containerGamePlayers").find(id=playerid)['class']
+    #     if playerClass == "player guessedWord":
+    #         break
+    #     time = info.body.div.next_sibling.next_sibling.find(id="ScreenGame").div.div.find(id="timer")
 
     """
     2. IF the player has to draw
